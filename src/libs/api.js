@@ -1,4 +1,4 @@
-import { apiBaseUrl } from "../config/env";
+import { apiBaseUrl, apiBaseUrlDev } from "../config/env";
 import { getAccessToken } from "./auth";
 
 export default async function fetchData(
