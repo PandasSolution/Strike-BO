@@ -220,7 +220,7 @@ const Login = () => {
                   <div className="col-xl-12">
                     <div className="auth-form">
                       <h3 className="text-center mb-4 text-white">
-                        Strike Dashboard
+                        Strike Dashboard Baily Road
                       </h3>
                       <form className="mt-4">
                         {showOtp ? (
