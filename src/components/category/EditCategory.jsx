@@ -7,6 +7,7 @@ import Modal from "../global/Modal";
 
 const editCategory = async (
   name,
+  discount, // added discount
   image,
   isActive,
   item,
@@ -17,9 +18,8 @@ const editCategory = async (
   setLoader(true);
 
   const formData = new FormData();
-
   formData.append("name", name);
-  //   formData.append("subtitle", subtitle);
+  formData.append("discount", discount); // append discount
   formData.append("isActive", isActive);
 
   if (image !== item.image) {
@@ -33,25 +33,21 @@ const editCategory = async (
     true
   );
 
-  const message = jsonData.message;
-  const success = jsonData.success;
+  const { success, message } = jsonData;
 
   if (!success) {
     setLoader(false);
     showErrorToast(message);
-    // eslint-disable-next-line no-throw-literal
-    throw {
-      message,
-    };
+    throw { message };
   }
 
   setLoader(false);
   showSuccessToast(message);
 
-  //fetch data
+  // fetch data
   getCategories();
 
-  //close modal
+  // close modal
   modalCloseButton.current.click();
 
   return { success, message };
@@ -60,6 +56,7 @@ const editCategory = async (
 const EditCategory = ({ item, getCategories }) => {
   const [loader, setLoader] = useState(false);
   const [name, setName] = useState(item.name);
+  const [discount, setDiscount] = useState(item.discount || 0); // new discount state
   const [isActive, setIsActive] = useState(item.isActive);
   const [image, setImage] = useState(item.image);
   const [tempImageUrl, setTempImageUrl] = useState(item.image);
@@ -84,6 +81,18 @@ const EditCategory = ({ item, getCategories }) => {
         </div>
 
         <div className="form-group">
+          <label className="text-black font-w500">Discount (%)</label>
+          <input
+            type="number"
+            min="0"
+            max="100"
+            className="form-control"
+            value={discount}
+            onChange={(e) => setDiscount(e.target.value)}
+          />
+        </div>
+
+        <div className="form-group">
           <label className="text-black font-w500">Active?</label>
           <select
             className="form-control default-select"
@@ -91,18 +100,6 @@ const EditCategory = ({ item, getCategories }) => {
           >
             <option value={"true"}>Yes</option>
             <option value={"false"}>No</option>
-            {/* {[
-                            { id: 1, value: true, label: 'Yes' },
-                            { id: 2, value: false, label: 'No' },
-                        ].map((itm, index) => (
-                            <option
-                                key={itm.id}
-                                value={itm.value}
-                                selected={itm.value === item.isCuratedCustomService ? true : false}
-                            >
-                                {itm.label}
-                            </option>
-                        ))} */}
           </select>
         </div>
 
@@ -116,45 +113,35 @@ const EditCategory = ({ item, getCategories }) => {
               setTempImageUrl(URL.createObjectURL(e.target.files[0]));
             }}
           />
-
           {tempImageUrl && (
-            <>
-              <img
-                src={tempImageUrl}
-                alt="image"
-                style={{
-                  width: "300px",
-                  height: "300px",
-                  objectFit: "contain",
-                }}
-              />
-            </>
+            <img
+              src={tempImageUrl}
+              alt="image"
+              style={{ width: "300px", height: "300px", objectFit: "contain" }}
+            />
           )}
         </div>
 
-        {loader === true ? (
-          <>
-            <Loader />
-          </>
+        {loader ? (
+          <Loader />
         ) : (
-          <>
-            <div className="form-group">
-              <Button
-                buttonOnClick={() =>
-                  editCategory(
-                    name,
-                    image,
-                    isActive,
-                    item,
-                    setLoader,
-                    getCategories,
-                    modalCloseButton
-                  )
-                }
-                buttonText={"Update"}
-              />
-            </div>
-          </>
+          <div className="form-group">
+            <Button
+              buttonOnClick={() =>
+                editCategory(
+                  name,
+                  discount, // pass discount
+                  image,
+                  isActive,
+                  item,
+                  setLoader,
+                  getCategories,
+                  modalCloseButton
+                )
+              }
+              buttonText={"Update"}
+            />
+          </div>
         )}
       </Modal>
     </>

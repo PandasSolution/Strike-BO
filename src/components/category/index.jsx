@@ -76,10 +76,10 @@ const CategoryList = () => {
 
   return (
     <>
-      {/* add modal */}
+      {/* Add modal */}
       <CreateCategory getCategories={getCategories} />
 
-      {/* table */}
+      {/* Table */}
       <div className="col-lg-12">
         <div className="card">
           <CardHeader
@@ -108,14 +108,15 @@ const CategoryList = () => {
                       <th>Name</th>
                       <th>Slug</th>
                       <th>Image</th>
+                      <th>Discount (%)</th>
                       <th>Active?</th>
                       <th>Action</th>
                     </tr>
                   </thead>
 
                   <tbody>
-                    {data ? (
-                      data?.map((item, index) => (
+                    {data?.length > 0 ? (
+                      data.map((item, index) => (
                         <tr key={item.id + index}>
                           <td>
                             <strong>{index + 1}</strong>
@@ -125,7 +126,7 @@ const CategoryList = () => {
                           <td>
                             {item?.image && (
                               <img
-                                src={item?.image}
+                                src={item.image}
                                 alt="category image"
                                 style={{
                                   width: "100px",
@@ -135,8 +136,8 @@ const CategoryList = () => {
                               />
                             )}
                           </td>
+                          <td>{item.discount ?? 0}</td> {/* Added discount */}
                           <td>{item.isActive ? "Active" : "Inactive"}</td>
-
                           <td>
                             <ActionButton>
                               <ActionButtonMenu
@@ -149,6 +150,7 @@ const CategoryList = () => {
                               />
                             </ActionButton>
                           </td>
+
                           <EditCategory
                             item={item}
                             getCategories={getCategories}
@@ -160,13 +162,11 @@ const CategoryList = () => {
                         </tr>
                       ))
                     ) : (
-                      <>
-                        <tr className="col-md-12 text-center">
-                          <td></td>
-                          <td>{message}</td>
-                          <td></td>
-                        </tr>
-                      </>
+                      <tr className="col-md-12 text-center">
+                        <td></td>
+                        <td>{message}</td>
+                        <td></td>
+                      </tr>
                     )}
                   </tbody>
 
@@ -176,6 +176,7 @@ const CategoryList = () => {
                       <th>Name</th>
                       <th>Slug</th>
                       <th>Image</th>
+                      <th>Discount (%)</th>
                       <th>Active?</th>
                       <th>Action</th>
                     </tr>
@@ -184,13 +185,11 @@ const CategoryList = () => {
               </IndianaDragScroller>
               <div className="col-md-12 text-center">
                 {data?.length === limit * page && (
-                  <>
-                    <Button
-                      buttonText={"Load more"}
-                      fontSize={"11px"}
-                      buttonOnClick={() => loadMoreCategory()}
-                    />
-                  </>
+                  <Button
+                    buttonText={"Load more"}
+                    fontSize={"11px"}
+                    buttonOnClick={loadMoreCategory}
+                  />
                 )}
               </div>
             </div>
