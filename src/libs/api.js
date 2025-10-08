@@ -8,7 +8,7 @@ export default async function fetchData(
   isFormData,
   cookies
 ) {
-  const response = await fetch(`${apiBaseUrl}${uri}`, {
+  const response = await fetch(`${apiBaseUrlDev}${uri}`, {
     method: method,
     headers: isFormData
       ? { token: `Bearer ${getAccessToken() ?? cookies?.accessToken}` }
